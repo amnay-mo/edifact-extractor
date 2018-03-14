@@ -27,7 +27,9 @@ CREATE TABLE TRAIN (
 	end_date DATE,
 	period_days varchar NOT NULL,
 	train_type varchar,
-	CONSTRAINT TRAIN_pk PRIMARY KEY (train_id,company_1_id,period_days,start_date,end_date)
+    start_loc varchar NOT NULL,
+    end_loc varchar NOT NULL,
+	CONSTRAINT TRAIN_pk PRIMARY KEY (train_id,company_1_id,period_days,start_date,end_date,start_loc,end_loc)
 ) WITH (
   OIDS=FALSE
 );

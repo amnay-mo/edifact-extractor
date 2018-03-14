@@ -133,9 +133,9 @@ if __name__ == '__main__':
         for line in f:
             if line[:3] == 'PRD':
                 parse_segment(segment)
-                segment = [line.rstrip()]
+                segment = [line.rstrip("'\n")]
             if line[:3] != 'PRD':
-                segment.append(line.rstrip())
+                segment.append(line.rstrip("'\n"))
 
 
 #    print(json.dumps(output))

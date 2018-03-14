@@ -77,7 +77,7 @@ def parse_segment(lines):
         return None
     if lines[0][:3] != 'PRD':
         raise Exception('First line of segment is not PRD')
-    pop, prd, start_date, end_date = {}, {}, None, None
+#pop, prd, start_date, end_date = {}, {}, None, None
     pdt = {'train_type': None}
     train_service_id = None
     for line in lines:
@@ -86,21 +86,20 @@ def parse_segment(lines):
             train_service_id = prd['train_service_id']
         if line[:3] == 'POP':
             pop = parse_pop(line)
-            start_date = pop['start_date']
-            end_date = pop['end_date']
+            #start_date = pop['start_date']
+            #end_date = pop['end_date']
         if line[:3] == 'PDT':
             pdt = parse_pdt(line)
         if line[:3] == 'POR':
             por = parse_por(line)
             list_por.append(por)
 
-    if pdt == {}:
-        print('PDT IS NONE!', train_service_id)
-
-
-    output = json.dumps({**prd, **pop, **pdt})
+    por_dict = {} 
+    por_dict ['start_loc'] = list_por[0]['location_id']
+    por_dict ['end_loc']= list_por[-1]['location_id']    
+    
+    output = json.dumps({**prd, **pop, **pdt, **por_dict})
     print(output)
-
 
 if __name__ == '__main__':
     output = {}
@@ -113,9 +112,9 @@ if __name__ == '__main__':
         for line in f:
             if line[:3] == 'PRD':
                 parse_segment(segment)
-                segment = [line.rstrip()]
+                segment = [line.rstrip("'\n")]
             if line[:3] != 'PRD':
-                segment.append(line.rstrip())
+                segment.append(line.rstrip("'\n"))
 
 
 #print(json.dumps(output))
