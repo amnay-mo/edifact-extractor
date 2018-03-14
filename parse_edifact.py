@@ -3,14 +3,25 @@ import json
 
 
 def parse_prd(prd_line):
+    company_1_id = None
+    company_2_id = None
     elements = prd_line.split('+')
-    company_id = elements[-1]
+    
+    if '**' in elements[-1]:
+        companies = elements[-1].split('**')
+        company_1_id = companies[0]   
+        company_2_id = companies[1]
+    else:
+        company_1_id = elements[-1]
+
     fes = elements[1].split(':')
     fes_length = len(fes)
     if fes_length < 4:
         fes += [None] * (4 - fes_length)
+
     return {
-        'company_id': company_id,
+        'company_1_id': company_1_id,
+        'company_2_id': company_2_id,
         'train_service_id': fes[0],
         'service_character': fes[1],
         'pricing_category': fes[2],

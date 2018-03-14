@@ -3,17 +3,22 @@ import json
 
 
 def parse_prd(prd_line):
+    company_1_id = None
+    company_2_id = None
     elements = prd_line.split('+')
-    company_1_id = None 
-    company_2_id = None  
-    fes = elements[1].split(':')
-    fes_length = len(fes)
-    if fes_length == 1:
+    
+    if '**' in elements[-1]:
         companies = elements[-1].split('**')
-        company_1_id = companies[0]
+        company_1_id = companies[0]   
         company_2_id = companies[1]
     else:
+        company_1_id = elements[-1]
+
+    fes = elements[1].split(':')
+    fes_length = len(fes)
+    if fes_length < 4:
         fes += [None] * (4 - fes_length)
+
     return {
         'company_1_id': company_1_id,
         'company_2_id': company_2_id,
@@ -35,23 +40,6 @@ def parse_pop(pop_line):
         'end_date': end_date,
         'period_days': components[3]
     }
-
-def parse_als(als_line):
-    elements = als_line.split('+')
-    location_type = elements[1]
-    components = elements[2].split(':')
-    location_id = components[0]
-    name = components[1]
-    longitude = elements[3]
-    latitude = elements[4]
-    return {
-        'location_id': location_id,
-        'location_type': location_type,
-        'name': name,
-        'longitude': longitude,
-        'latitude': latitude
-    }
-
 
 def parse_por(por_line):
 
@@ -110,11 +98,8 @@ def parse_segment(lines):
         print('PDT IS NONE!', train_service_id)
 
 
-    output[train_service_id + '_' + start_date + ' ' + end_date] = {
-        'train_service': {**prd, **pop, **pdt},
-        'train_timetable': list_por
-
-    }
+    output = json.dumps({**prd, **pop, **pdt})
+    print(output)
 
 
 if __name__ == '__main__':
@@ -133,4 +118,4 @@ if __name__ == '__main__':
                 segment.append(line.rstrip())
 
 
-#    print(json.dumps(output))
+#print(json.dumps(output))
